@@ -1,0 +1,115 @@
+#!/bin/bash
+
+#************************************************#
+#                  MineForman                    #
+#           Written by Charles Bock              #
+#                Oct 13, 2010                    #
+#                                                #
+#             Minecraft Admin Tool               #
+#************************************************#
+
+source ./lib/helper.sh
+source ./lib/exports.sh
+
+iact="no"
+initSetup="no"
+
+doGit ()
+{
+setupGit
+}
+
+
+doMap ()
+{
+setupMap
+}
+
+interactive ()
+{
+
+    clear
+ 
+    color $green $bold
+    echo "_|      _|  _|                        _|_|_|                          _|_|    _|     " 
+    echo "_|_|  _|_|      _|_|_|      _|_|    _|        _|  _|_|    _|_|_|    _|      _|_|_|_| " 
+    echo "_|  _|  _|  _|  _|    _|  _|_|_|_|  _|        _|_|      _|    _|  _|_|_|_|    _|     " 
+    echo "_|      _|  _|  _|    _|  _|        _|        _|        _|    _|    _|        _|     " 
+    echo "_|      _|  _|  _|    _|    _|_|_|    _|_|_|  _|          _|_|_|    _|          _|_| "
+    resetColor
+
+    colorMsg "What would you like to do today?" $white $bold
+    echo " 1] Setup regular backups"
+    echo " 2] Do a one time backup"
+    echo " 3] Setup regular mappings" 
+    echo " 4] Generate a one time map"
+    echo " 5] Quit"
+    echo "+----------------------------------+"
+    mainMenu
+}
+
+mainMenu () 
+{
+	echo -n ":"
+	read inVar
+    case $inVar in
+	1|2)
+		doGit
+	;;
+    3|4)
+        echo "On it!"
+		doMap
+    ;;
+    5)
+        echo "I'm gone"
+		exit
+    ;;
+    *)
+        echo "What?"
+		unset inVar
+        mainMenu
+    ;;
+    esac
+}
+
+usage()
+{
+clear
+cat << EOF
+usage: $0 options
+
+OPTIONS:
+   -h      Show this message
+   -s      Initial Setup
+   -m      Map World 
+   -b      Do a Backup
+   -i	   Interactive Menu
+	(more options to come...)
+EOF
+}
+
+while getopts “:hsmbi” OPTION
+do
+     case $OPTION in
+         h)
+            usage
+            exit 1
+            ;;
+         s)
+            setup
+            ;;
+		 i)
+			interactive
+			;;
+         ?)
+            usage
+            exit
+            ;;
+     esac
+done
+
+exit
+
+
+
+
